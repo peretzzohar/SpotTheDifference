@@ -1,0 +1,95 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [whereswaldo]
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports: ["8001:8001"]
+    environment:
+      PORT: 8001
+      NODE_ENV: production
+      REDIS_URL: redis://redis:6379
+      DATA_DIR: /app/data
+      QUEUE_NAME: "-Where'sWaldo:inference"
+      DATABASE_PATH: /app/data/-Where'sWaldo.sqlite
+      CORS_ORIGINS: http://localhost:5172,http://127.0.0.1:5172
+      MAX_FILE_SIZE_BYTES: 10485760
+      INFERENCE_API_URL: http://inference:8009
+    volumes: [whereswaldo-data:/app/data]
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks: [whereswaldo]
+
+  inference:
+    build:
+      context: .
+      dockerfile: inference/Dockerfile
+    ports: ["8009:8009"]
+    environment:
+      MODEL_PATH: /app/models/model-placeholder.pt
+      REDIS_URL: redis://redis:6379
+      INFERENCE_API_URL: http://inference:8009/api/v1/analyze
+      DATA_DIR: /app/data
+      DATABASE_PATH: /app/data/-Where'sWaldo.sqlite
+      QUEUE_NAME: "-Where'sWaldo:inference"
+      PYTHONPATH: /app
+    volumes: [whereswaldo-data:/app/data]
+    depends_on:
+      redis:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    networks: [whereswaldo]
+
+  worker:
+    build:
+      context: .
+      dockerfile: inference/Dockerfile
+    environment:
+      REDIS_URL: redis://redis:6379
+      DATA_DIR: /app/data
+      DATABASE_PATH: /app/data/-Where'sWaldo.sqlite
+      QUEUE_NAME: "-Where'sWaldo:inference"
+      INFERENCE_API_URL: http://inference:8009/api/v1/analyze
+      PYTHONPATH: /app
+    volumes: [whereswaldo-data:/app/data]
+    depends_on:
+      redis:
+        condition: service_healthy
+      inference:
+        condition: service_started
+    entrypoint: ["python", "inference/worker.py"]
+    networks: [whereswaldo]
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports: ["5172:5172"]
+    environment:
+      VITE_API_BASE_URL: http://localhost:8001
+    depends_on:
+      backend:
+        condition: service_started
+    networks: [whereswaldo]
+
+volumes:
+  whereswaldo-data:
+  redis-data:
+
+networks:
+  whereswaldo:
+    driver: bridge

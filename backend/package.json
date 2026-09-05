@@ -1,0 +1,8 @@
+{
+  "name": "whereswaldo-backend-skeleton",
+  "private": true,
+  "version": "0.1.0",
+  "type": "commonjs",
+  "scripts": {"start": "node server.js", "dev": "node --watch server.js"},
+  "dependencies": {"cors": "^2.8.5", "dotenv": "^16.4.5", "express": "^4.21.1", "ioredis": "^5.4.1", "multer": "^1.4.5-lts.1", "sqlite3": "^5.1.7"}
+}

@@ -1,0 +1,2 @@
+# Python dependencies used by the inference boundary when running from backend context.
+-r ../requirements.txt

@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic-settings
+pillow
+pytest
+pytest-asyncio
+httpx
+transformers
+redis
+requests
+ultralytics
+numpy
+datasets

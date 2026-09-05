@@ -1,0 +1,11 @@
+node_modules
+.venv
+__pycache__
+.pytest_cache
+dist
+.env
+*.log
+*.sqlite
+uploads
+outputs
+models/*.pt
