@@ -87,7 +87,72 @@ main { max-width: 75rem; margin: auto; padding: 5rem 2rem 7rem; } h1, h2, h3 { f
 .change-description { max-width: 42rem; margin-top: 2rem; padding: 1.3rem 1.5rem; background: var(--color-surface-tint); border-left: 4px solid var(--color-accent); } .change-description .eyebrow { margin-bottom: .5rem; } .change-description p { margin: 0; font-size: 1.1rem; }
 .dataset-tag { color: var(--color-muted); font-size: .8rem; } .muted { color: var(--color-muted); } .demo-controls { display: flex; gap: 1rem; align-items: end; margin: 2rem 0; } .demo-controls label { display: grid; gap: .4rem; color: var(--color-muted); font-size: .8rem; } .demo-controls input { width: 5rem; border: 1px solid var(--color-border); color: var(--color-text); background: var(--color-surface); padding: .75rem; } .sample-result { max-width: 50rem; } .sample-images { grid-template-columns: repeat(2, 1fr); } .sample-result p { display: grid; gap: .3rem; }
 .about-section > p { max-width: 45rem; color: var(--color-muted); font-size: 1.1rem; margin: 1.8rem 0 4rem; } .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--color-border); } .about-grid article { background: var(--color-bg); padding: 1.5rem; min-height: 12rem; } .about-grid span { color: var(--color-accent); font: 700 .8rem 'Space Grotesk'; } .about-grid h2 { font-size: 1.25rem; margin-top: 2.5rem; } .about-grid p { color: var(--color-muted); font-size: .9rem; }
-@media (max-width: 700px) { .site-header { padding: 1rem; align-items: flex-start; gap: 1rem; flex-direction: column; } main { padding: 3rem 1rem; } .upload-grid { grid-template-columns: 1fr; } .swap-mark { transform: rotate(90deg); } .upload-preview { height: 15rem; } .result-images, .about-grid { grid-template-columns: 1fr; } .section-heading { align-items: start; gap: 1rem; flex-direction: column; } nav { width: 100%; justify-content: space-between; } nav button { padding-left: 0; padding-right: 0; } }
+@media (max-width: 1100px) {
+	.site-header, main { max-width: 68rem; }
+	main { padding-top: 4rem; }
+	h1 { font-size: clamp(2.8rem, 8vw, 5.5rem); }
+}
+
+@media (max-width: 900px) {
+	.site-header { padding-left: 1.5rem; padding-right: 1.5rem; }
+	main { padding: 3.5rem 1.5rem 5rem; }
+	.result-images { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.difference-figure { grid-column: 1 / -1; max-width: 50%; }
+	.about-grid { grid-template-columns: repeat(2, 1fr); }
+	.about-grid article:last-child { grid-column: 1 / -1; }
+}
+
+@media (max-width: 700px) {
+	.site-header { padding: 1rem; align-items: flex-start; gap: 1rem; flex-direction: column; }
+	main { padding: 3rem 1rem; }
+	.hero { margin-bottom: 3rem; }
+	.upload-grid { grid-template-columns: 1fr; }
+	.swap-mark { transform: rotate(90deg); display: block; }
+	.upload-preview { height: 15rem; }
+	.result-images, .about-grid { grid-template-columns: 1fr; }
+	.difference-figure, .about-grid article:last-child { grid-column: auto; max-width: none; }
+	.section-heading { align-items: start; gap: 1rem; flex-direction: column; }
+	nav { width: 100%; justify-content: space-between; flex-wrap: wrap; }
+	nav button { padding-left: 0; padding-right: 0; }
+}
+
+@media (max-width: 560px) {
+	.brand { font-size: 1rem; }
+	nav { justify-content: flex-start; gap: .15rem .8rem; }
+	nav button { font-size: .88rem; }
+	.theme-toggle { margin-left: auto; }
+	h1 { font-size: clamp(2.5rem, 15vw, 4rem); }
+	h2 { font-size: 1.65rem; }
+	.hero p, .about-section > p { font-size: 1rem; }
+	.demo-controls, .results-actions { align-items: stretch; flex-direction: column; }
+	.demo-controls input { width: 100%; }
+	.compare-button { justify-content: center; width: 100%; }
+}
+
+@media (max-width: 480px) {
+	.site-header { gap: .75rem; }
+	main { padding: 2.5rem .8rem 4rem; }
+	.upload-preview { height: 13rem; }
+	.change-description { padding: 1rem; }
+	.difference-list article { grid-template-columns: 1.5rem 1fr; gap: .65rem; }
+	.difference-list article b { grid-column: 2; }
+	.result-images, .sample-images { gap: .75rem; }
+}
+
+@media (max-width: 360px) {
+	.site-header { padding: .8rem; }
+	main { padding-left: .65rem; padding-right: .65rem; }
+	.brand { gap: .45rem; font-size: .9rem; }
+	.brand-mark { width: 1.75rem; height: 1.75rem; }
+	nav { gap: .1rem .55rem; }
+	nav button { font-size: .8rem; }
+	.theme-toggle { padding: .45rem .55rem; }
+	h1 { font-size: 2.35rem; }
+	.upload-preview { height: 11rem; }
+	.compared-overlay { padding: 1rem; }
+	.compared-overlay strong { font-size: 1.1rem; }
+	.compared-overlay > span { font-size: .7rem; }
+}
 }
 
 @layer utilities {
