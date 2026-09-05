@@ -22,8 +22,8 @@ services:
       NODE_ENV: production
       REDIS_URL: redis://redis:6379
       DATA_DIR: /app/data
-      QUEUE_NAME: "-Where'sWaldo:inference"
-      DATABASE_PATH: /app/data/-Where'sWaldo.sqlite
+      QUEUE_NAME: "-SpotTheDifference:inference"
+      DATABASE_PATH: /app/data/-SpotTheDifference.sqlite
       CORS_ORIGINS: http://localhost:5172,http://127.0.0.1:5172
       MAX_FILE_SIZE_BYTES: 10485760
       INFERENCE_API_URL: http://inference:8009
@@ -43,8 +43,8 @@ services:
       REDIS_URL: redis://redis:6379
       INFERENCE_API_URL: http://inference:8009/api/v1/analyze
       DATA_DIR: /app/data
-      DATABASE_PATH: /app/data/-Where'sWaldo.sqlite
-      QUEUE_NAME: "-Where'sWaldo:inference"
+      DATABASE_PATH: /app/data/-SpotTheDifference.sqlite
+      QUEUE_NAME: "-SpotTheDifference:inference"
       PYTHONPATH: /app
     volumes: [SpotTheDifference-data:/app/data]
     depends_on:
@@ -61,8 +61,8 @@ services:
     environment:
       REDIS_URL: redis://redis:6379
       DATA_DIR: /app/data
-      DATABASE_PATH: /app/data/-Where'sWaldo.sqlite
-      QUEUE_NAME: "-Where'sWaldo:inference"
+      DATABASE_PATH: /app/data/-SpotTheDifference.sqlite
+      QUEUE_NAME: "-SpotTheDifference:inference"
       INFERENCE_API_URL: http://inference:8009/api/v1/analyze
       PYTHONPATH: /app
     volumes: [SpotTheDifference-data:/app/data]

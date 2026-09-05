@@ -1,4 +1,4 @@
-# Where's Waldo — Image Difference Detector
+# SpotTheDifference — Image Difference Detector
 
 A modular image comparison application that accepts two images, identifies visual changes, highlights detected differences, and reports confidence and processing time.
 

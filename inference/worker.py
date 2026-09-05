@@ -1,6 +1,6 @@
 import os
 
-QUEUE_NAME = os.getenv("QUEUE_NAME", "-Where'sWaldo:inference")
+QUEUE_NAME = os.getenv("QUEUE_NAME", "-SpotTheDifference:inference")
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 INFERENCE_API_URL = os.getenv("INFERENCE_API_URL", "http://localhost:8009/api/v1/analyze")
 
