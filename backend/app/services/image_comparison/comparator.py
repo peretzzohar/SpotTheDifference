@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image, ImageChops, ImageEnhance, ImageFilter, ImageOps
 
 from .difference_visualizer import as_data_url, highlight_difference
+from .difference_describer import DifferenceDescriber
 from .preprocessing import align_images
 
 
@@ -17,6 +18,9 @@ class ComparisonResult:
 
 class ImageComparator:
     """Pixel-based baseline with a stable interface for a future ML comparator."""
+
+    def __init__(self) -> None:
+        self.describer = DifferenceDescriber()
 
     def compare(self, image1: Image.Image, image2: Image.Image) -> ComparisonResult:
         first, second = align_images(image1, image2)
@@ -44,6 +48,8 @@ class ImageComparator:
             }]
 
         visualization = highlight_difference(first, mask, bounding_box)
+        description = self.describer.describe(first, second, visualization, mask, bounding_box)
+        differences[0]["description"] = description
         return ComparisonResult(
             differences=differences,
             difference_image=as_data_url(visualization),

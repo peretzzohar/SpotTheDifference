@@ -37,7 +37,9 @@ def get_sample(index: int = 0) -> dict:
     sample = dataset[index % len(dataset)]
     image_a = _first_value(sample, ("image1", "image_a", "image_1", "left", "image"))
     image_b = _first_value(sample, ("image2", "image_b", "image_2", "right", "image_changed"))
-    description = _first_value(sample, ("difference", "differences", "description", "caption", "text"))
+    description = _first_value(sample, ("difference", "differences", "description", "caption", "text", "sentences"))
+    if isinstance(description, list):
+        description = " ".join(str(sentence) for sentence in description)
     return {
         "dataset": DATASET_ID,
         "index": index % len(dataset),

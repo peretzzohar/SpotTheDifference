@@ -30,6 +30,14 @@ python -m pip install -r requirements.txt
 python -m uvicorn backend.app.main:app --reload --port 8009
 ```
 
+To enable natural-language change descriptions from the red-marked Differences image, set a Hugging Face access token before starting FastAPI:
+
+```bash
+export HF_TOKEN=your_huggingface_token
+```
+
+The service sends Image 1, Image 2, and the generated Differences image to the configured vision-language model. Without `HF_TOKEN`, it keeps the comparison service available and returns a mask-based description with the changed region.
+
 **Backend:**
 
 ```bash
