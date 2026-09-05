@@ -12,48 +12,97 @@ A modular image comparison application that accepts two images, highlights visua
 - `ml`: future training/evaluation module boundaries.
 - `docker-compose.yml`: Redis, Node gateway, FastAPI inference, worker, and frontend services.
 
-## Run with Docker
+## Activate the app with Docker
 
-From the project root:
+Prerequisites:
+
+- Docker Desktop must be installed and running.
+- Docker Compose must be available through `docker compose`.
+
+From the project root (`D:\where's-waldo`), run:
 
 ```bash
 docker compose up --build
 ```
 
-Open `http://localhost:5172`. The frontend uses the Node gateway at `http://localhost:8001`; the gateway calls the internal FastAPI service at `http://inference:8009`.
+The first run builds the frontend, backend, and inference images. Keep this terminal open while using the app. Open `http://localhost:5172` in a browser.
 
-The Redis and worker services preserve the original skeleton architecture for future asynchronous processing. The current comparison request is synchronous so the UI can show its result immediately.
+Docker service URLs:
 
-## Local development
+- Frontend: `http://localhost:5172`
+- Node gateway: `http://localhost:8001`
+- FastAPI inference service: `http://localhost:8009`
 
-1. Copy `.env.example` to `.env` and adjust local values if needed.
-2. Install frontend dependencies and start Vite:
+To stop the app, press `Ctrl+C`. To stop and remove the containers and their Compose network, run:
 
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
+```bash
+docker compose down
+```
 
-3. Install Python dependencies from the project root:
+To also remove the named application volumes, use `docker compose down -v`. The Redis and worker services preserve the original skeleton architecture for future asynchronous processing. The current comparison request is synchronous so the UI can show its result immediately.
 
-   ```bash
-   python -m pip install -r requirements.txt
-   ```
+## Activate the app locally
 
-4. Start the FastAPI service from the project root:
+Prerequisites:
 
-   ```bash
-   uvicorn backend.app.main:app --reload --port 8009
-   ```
+- Node.js 20 or newer and npm.
+- Python 3.11 or newer.
+- Redis running locally at `localhost:6379` if you want to use the worker architecture.
 
-5. Start the Node gateway in another terminal:
+Run the following from the project root. Use separate terminals for each long-running service.
 
-   ```bash
-   cd backend
-   npm install
-   npm run dev
-   ```
+### 1. Configure Python
+
+Copy the environment template and create a virtual environment:
+
+```bash
+copy .env.example .env
+python -m venv .venv
+.venv\Scripts\activate
+python -m pip install -r requirements.txt
+```
+
+In Git Bash, the activation command is:
+
+```bash
+source .venv/Scripts/activate
+```
+
+### 2. Start the FastAPI comparison service
+
+In a terminal with the virtual environment activated:
+
+```bash
+uvicorn backend.app.main:app --reload --port 8009
+```
+
+The inference API is available at `http://localhost:8009`.
+
+### 3. Start the Node gateway
+
+In a second terminal:
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+The gateway is available at `http://localhost:8001`.
+
+### 4. Start the React frontend
+
+In a third terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open the Vite URL shown in the terminal, normally `http://localhost:5172`. The frontend sends comparison requests to the Node gateway, which forwards them to FastAPI.
+
+To stop a local service, press `Ctrl+C` in its terminal. If you only want to check the frontend without the backend, run `npm run build` from `frontend`; image comparison itself requires both backend services to be running.
 
 ## API
 
