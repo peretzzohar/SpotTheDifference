@@ -2,7 +2,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis-data:/data
     healthcheck:
@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    ports: ["8001:8001"]
+    ports: ["8002:8001"]
     environment:
       PORT: 8001
       NODE_ENV: production
@@ -24,7 +24,7 @@ services:
       DATA_DIR: /app/data
       QUEUE_NAME: "-SpotTheDifference:inference"
       DATABASE_PATH: /app/data/-SpotTheDifference.sqlite
-      CORS_ORIGINS: http://localhost:5172,http://127.0.0.1:5172
+      CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
       MAX_FILE_SIZE_BYTES: 10485760
       INFERENCE_API_URL: http://inference:8009
     volumes: [SpotTheDifference-data:/app/data]
@@ -37,7 +37,7 @@ services:
     build:
       context: .
       dockerfile: inference/Dockerfile
-    ports: ["8009:8009"]
+    ports: ["8010:8009"]
     environment:
       MODEL_PATH: /app/models/model-placeholder.pt
       REDIS_URL: redis://redis:6379
@@ -78,9 +78,9 @@ services:
     build:
       context: .
       dockerfile: frontend/Dockerfile
-    ports: ["5172:5172"]
+    ports: ["5173:5172"]
     environment:
-      VITE_API_BASE_URL: http://localhost:8001
+      VITE_API_BASE_URL: http://localhost:8002
     depends_on:
       backend:
         condition: service_started

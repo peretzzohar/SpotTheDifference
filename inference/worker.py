@@ -1,8 +1,8 @@
 import os
 
 QUEUE_NAME = os.getenv("QUEUE_NAME", "-SpotTheDifference:inference")
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
-INFERENCE_API_URL = os.getenv("INFERENCE_API_URL", "http://localhost:8009/api/v1/analyze")
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6380")
+INFERENCE_API_URL = os.getenv("INFERENCE_API_URL", "http://localhost:8010/api/v1/analyze")
 
 
 def process_job(message: bytes | str) -> dict:

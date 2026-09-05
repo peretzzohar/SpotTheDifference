@@ -7,13 +7,13 @@ const Redis = require("ioredis");
 const { createDatabase, initializeDatabase } = require("./db");
 
 const app = express();
-const port = Number(process.env.PORT || 8001);
-const redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379", { lazyConnect: true, maxRetriesPerRequest: 1 });
+const port = Number(process.env.PORT || 8002);
+const redis = new Redis(process.env.REDIS_URL || "redis://localhost:6380", { lazyConnect: true, maxRetriesPerRequest: 1 });
 const database = initializeDatabase(createDatabase(process.env.DATABASE_PATH || ":memory:"));
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: Number(process.env.MAX_FILE_SIZE_BYTES || 10485760) } });
-const inferenceApiUrl = process.env.INFERENCE_API_URL || "http://localhost:8009";
+const inferenceApiUrl = process.env.INFERENCE_API_URL || "http://localhost:8010";
 
-app.use(cors({ origin: (process.env.CORS_ORIGINS || "http://localhost:5172").split(",") }));
+app.use(cors({ origin: (process.env.CORS_ORIGINS || "http://localhost:5173").split(",") }));
 app.use(express.json());
 
 app.get("/health", (_request, response) => response.json({ status: "ok", service: "backend" }));

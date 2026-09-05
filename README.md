@@ -14,7 +14,14 @@ React · Node.js · Express · FastAPI · Python · Pillow · NumPy · Docker
 docker compose up --build
 ```
 
-Open: `http://localhost:5172`
+Open: `http://localhost:5173`
+
+Service endpoints:
+
+* Frontend: `http://localhost:5173`
+* Node.js backend: `http://localhost:8002`
+* FastAPI health: `http://localhost:8010/health`
+* Redis: `localhost:6380`
 
 ## Run Locally
 
@@ -27,7 +34,7 @@ python -m pip install -r requirements.txt
 **FastAPI:**
 
 ```bash
-python -m uvicorn backend.app.main:app --reload --port 8009
+python -m uvicorn backend.app.main:app --reload --port 8010
 ```
 
 To enable natural-language change descriptions from the red-marked Differences image, set a Hugging Face access token before starting FastAPI:
@@ -45,6 +52,8 @@ cd backend
 npm install
 npm run dev
 ```
+
+The local backend listens on port `8002` and the local FastAPI service listens on port `8010`.
 
 **Frontend:**
 
