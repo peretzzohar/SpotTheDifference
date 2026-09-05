@@ -1,74 +1,116 @@
-# -Where'sWaldo Image Difference Detector
+# Where's Waldo — Image Difference Detector
 
-A modular image comparison application that accepts two images, highlights visual changes, and reports confidence and processing time. The default comparator is a transparent pixel-based baseline designed to be replaced by an ML model later.
+A modular image comparison application that accepts two images, identifies visual changes, highlights detected differences, and reports confidence and processing time.
+
+The default comparator is a transparent pixel-based baseline designed to be replaced by an ML model in the future.
 
 ## Architecture
 
-- `frontend`: React 18 + Vite interface with comparison, results, Dataset Demo, and About views.
-- `backend`: Node.js + Express gateway on port 8001. It validates multipart requests and proxies comparison and dataset requests.
-- `backend/app`: FastAPI inference service contract and comparison modules.
-- `backend/app/services/image_comparison`: image loading/alignment, pixel comparison, and difference visualization.
-- `inference`: FastAPI Docker entry point and worker boundary.
-- `ml`: future training/evaluation module boundaries.
-- `docker-compose.yml`: Redis, Node gateway, FastAPI inference, worker, and frontend services.
+* `frontend`: React 18 + Vite interface with Comparison, Results, Dataset Demo, and About views.
+* `backend`: Node.js + Express gateway running on port `8001`. It validates multipart requests and proxies comparison and dataset requests.
+* `backend/app`: FastAPI inference service contract and comparison modules.
+* `backend/app/services/image_comparison`: Image loading and alignment, pixel comparison, and difference visualization.
+* `inference`: FastAPI Docker entry point and worker boundary.
+* `ml`: Future training and evaluation module boundaries.
+* `docker-compose.yml`: Redis, Node gateway, FastAPI inference, worker, and frontend services.
 
-## Activate the app with Docker
+## Running the App with Docker
 
-Prerequisites:
+### Prerequisites
 
-- Docker Desktop must be installed and running.
-- Docker Compose must be available through `docker compose`.
+* Docker Desktop must be installed and running.
+* Docker Compose must be available through `docker compose`.
 
-From the project root (`D:\where's-waldo`), run:
+From the project root:
 
 ```bash
 docker compose up --build
 ```
 
-The first run builds the frontend, backend, and inference images. Keep this terminal open while using the app. Open `http://localhost:5172` in a browser.
+The first run builds the frontend, backend, and inference images.
 
-Docker service URLs:
+Keep the terminal open while using the application.
 
-- Frontend: `http://localhost:5172`
-- Node gateway: `http://localhost:8001`
-- FastAPI inference service: `http://localhost:8009`
+Open:
 
-To stop the app, press `Ctrl+C`. To stop and remove the containers and their Compose network, run:
+`http://localhost:5172`
+
+### Docker Service URLs
+
+| Service           | URL                     |
+| ----------------- | ----------------------- |
+| Frontend          | `http://localhost:5172` |
+| Node Gateway      | `http://localhost:8001` |
+| FastAPI Inference | `http://localhost:8009` |
+
+### Stop the Application
+
+Press `Ctrl+C` in the terminal running Docker Compose.
+
+To stop and remove the containers and their Compose network:
 
 ```bash
 docker compose down
 ```
 
-To also remove the named application volumes, use `docker compose down -v`. The Redis and worker services preserve the original skeleton architecture for future asynchronous processing. The current comparison request is synchronous so the UI can show its result immediately.
+To also remove the named application volumes:
 
-## Activate the app locally
+```bash
+docker compose down -v
+```
 
-Prerequisites:
+The Redis and worker services preserve the original skeleton architecture for future asynchronous processing. The current image-comparison request is synchronous so the UI can display results immediately.
 
-- Node.js 20 or newer and npm.
-- Python 3.11 or newer.
-- Redis running locally at `localhost:6379` if you want to use the worker architecture.
+## Running the App Locally
 
-Run the following from the project root. Use separate terminals for each long-running service.
+### Prerequisites
+
+* Node.js 20 or newer
+* npm
+* Python 3.11 or newer
+* Redis running locally at `localhost:6379` if you want to use the worker architecture
+
+Run the following commands from the project root in Git Bash.
+
+Use separate terminals for each long-running service.
 
 ### 1. Configure Python
 
-Copy the environment template and create a virtual environment:
+Copy the environment template:
 
 ```bash
-copy .env.example .env
+cp .env.example .env
+```
+
+Create and activate a virtual environment:
+
+```bash
 python -m venv .venv
-.venv\Scripts\activate
+source .venv/Scripts/activate
+```
+
+Install the Python dependencies:
+
+```bash
 python -m pip install -r requirements.txt
 ```
 
-In Git Bash, the activation command is:
+If the virtual environment already exists, activate it directly:
 
 ```bash
 source .venv/Scripts/activate
 ```
 
-### 2. Start the FastAPI comparison service
+#### Windows Command Prompt
+
+If you are using Windows Command Prompt instead of Git Bash:
+
+```cmd
+copy .env.example .env
+.venv\Scripts\activate
+```
+
+### 2. Start the FastAPI Comparison Service
 
 In a terminal with the virtual environment activated:
 
@@ -76,11 +118,13 @@ In a terminal with the virtual environment activated:
 uvicorn backend.app.main:app --reload --port 8009
 ```
 
-The inference API is available at `http://localhost:8009`.
+The inference API will be available at:
 
-### 3. Start the Node gateway
+`http://localhost:8009`
 
-In a second terminal:
+### 3. Start the Node Gateway
+
+Open a second terminal:
 
 ```bash
 cd backend
@@ -88,11 +132,13 @@ npm install
 npm run dev
 ```
 
-The gateway is available at `http://localhost:8001`.
+The gateway will be available at:
 
-### 4. Start the React frontend
+`http://localhost:8001`
 
-In a third terminal:
+### 4. Start the React Frontend
+
+Open a third terminal:
 
 ```bash
 cd frontend
@@ -100,21 +146,73 @@ npm install
 npm run dev
 ```
 
-Open the Vite URL shown in the terminal, normally `http://localhost:5172`. The frontend sends comparison requests to the Node gateway, which forwards them to FastAPI.
+Open the Vite URL shown in the terminal, normally:
 
-To stop a local service, press `Ctrl+C` in its terminal. If you only want to check the frontend without the backend, run `npm run build` from `frontend`; image comparison itself requires both backend services to be running.
+`http://localhost:5172`
+
+The frontend sends comparison requests to the Node gateway, which forwards them to the FastAPI inference service.
+
+To stop a local service, press `Ctrl+C` in its terminal.
+
+If you only want to verify that the frontend builds correctly without running the backend:
+
+```bash
+cd frontend
+npm run build
+```
+
+Image comparison itself requires both backend services to be running.
 
 ## API
 
-- `GET /health`: gateway health response.
-- `POST /api/compare`: multipart request with `image1` and `image2`. Supports JPG, JPEG, PNG, and WEBP up to 10 MB each.
-- `GET /api/dataset/sample?index=0`: loads one external Spot-the-Diff sample on demand.
+### `GET /health`
 
-A comparison response contains `success`, `differences`, `difference_image` as a PNG data URL, aligned image dimensions, and `processing_time`. Each difference includes a description, confidence, changed-area percentage, and bounding box when a change is detected.
+Returns the gateway health status.
 
-## Dataset integration
+### `POST /api/compare`
 
-The Dataset Demo references the Hugging Face dataset `Lancelot53/spot-the-diff` through:
+Accepts a multipart request containing:
+
+* `image1`
+* `image2`
+
+Supported image formats:
+
+* JPG
+* JPEG
+* PNG
+* WEBP
+
+Maximum size:
+
+* 10 MB per image
+
+A successful comparison response contains:
+
+* `success`
+* `differences`
+* `difference_image` — PNG data URL containing the visual difference result
+* aligned image dimensions
+* `processing_time`
+
+Each detected difference includes:
+
+* description
+* confidence
+* changed-area percentage
+* bounding box when a change is detected
+
+### `GET /api/dataset/sample?index=0`
+
+Loads a single external Spot-the-Diff dataset sample on demand.
+
+## Dataset Integration
+
+The Dataset Demo uses the Hugging Face dataset:
+
+`Lancelot53/spot-the-diff`
+
+The dataset is accessed with:
 
 ```python
 from datasets import load_dataset
@@ -122,12 +220,52 @@ from datasets import load_dataset
 ds = load_dataset("Lancelot53/spot-the-diff", split="train")
 ```
 
-The dataset is loaded only when a demo sample is requested. It is not downloaded during project setup, copied into the repository, bundled into a Docker image, placed in the frontend, or stored in a project `dataset/` directory. Dataset availability requires network access and the `datasets` package.
+The dataset is loaded **only when a demo sample is requested**.
 
-## Comparison and ML extension
+It is not:
 
-`ImageComparator.compare(image1, image2)` is the stable comparison boundary. The current implementation aligns images, measures pixel differences, removes small noise, creates a red-highlight visualization, and returns structured findings. A future model can implement the same interface or be injected behind this service without changing the API or frontend contract. No model is trained when the application starts.
+* downloaded during project setup
+* copied into the repository
+* bundled into a Docker image
+* placed in the frontend
+* stored in a project `dataset/` directory
 
-## Safety and storage
+Dataset access requires network connectivity and the Python `datasets` package.
 
-Uploads are held in memory for the comparison request. This template does not commit user uploads, generated images, datasets, databases, credentials, model weights, caches, logs, or environment files. `.gitignore` excludes those paths and artifact types. `.env.example` contains placeholders and local service defaults only.
+## Comparison and ML Extension
+
+`ImageComparator.compare(image1, image2)` is the stable comparison boundary.
+
+The current implementation:
+
+1. Aligns the input images.
+2. Measures pixel-level differences.
+3. Removes small areas of noise.
+4. Creates a red-highlight difference visualization.
+5. Returns structured comparison findings.
+
+The comparison layer is designed to support a future ML implementation.
+
+A future model can implement the same interface or be injected behind the comparison service without requiring changes to the API or frontend contract.
+
+**No ML model is trained when the application starts.**
+
+## Safety and Storage
+
+Uploads are held in memory for the duration of the comparison request.
+
+This project does not commit or permanently store:
+
+* user uploads
+* generated images
+* datasets
+* databases
+* credentials
+* model weights
+* caches
+* logs
+* environment files
+
+`.gitignore` excludes these paths and artifact types.
+
+`.env.example` contains placeholders and local service defaults only.

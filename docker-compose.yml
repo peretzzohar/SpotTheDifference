@@ -10,7 +10,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    networks: [whereswaldo]
+    networks: [SpotTheDifference]
 
   backend:
     build:
@@ -27,11 +27,11 @@ services:
       CORS_ORIGINS: http://localhost:5172,http://127.0.0.1:5172
       MAX_FILE_SIZE_BYTES: 10485760
       INFERENCE_API_URL: http://inference:8009
-    volumes: [whereswaldo-data:/app/data]
+    volumes: [SpotTheDifference-data:/app/data]
     depends_on:
       redis:
         condition: service_healthy
-    networks: [whereswaldo]
+    networks: [SpotTheDifference]
 
   inference:
     build:
@@ -46,13 +46,13 @@ services:
       DATABASE_PATH: /app/data/-Where'sWaldo.sqlite
       QUEUE_NAME: "-Where'sWaldo:inference"
       PYTHONPATH: /app
-    volumes: [whereswaldo-data:/app/data]
+    volumes: [SpotTheDifference-data:/app/data]
     depends_on:
       redis:
         condition: service_healthy
       backend:
         condition: service_started
-    networks: [whereswaldo]
+    networks: [SpotTheDifference]
 
   worker:
     build:
@@ -65,14 +65,14 @@ services:
       QUEUE_NAME: "-Where'sWaldo:inference"
       INFERENCE_API_URL: http://inference:8009/api/v1/analyze
       PYTHONPATH: /app
-    volumes: [whereswaldo-data:/app/data]
+    volumes: [SpotTheDifference-data:/app/data]
     depends_on:
       redis:
         condition: service_healthy
       inference:
         condition: service_started
     entrypoint: ["python", "inference/worker.py"]
-    networks: [whereswaldo]
+    networks: [SpotTheDifference]
 
   frontend:
     build:
@@ -84,12 +84,12 @@ services:
     depends_on:
       backend:
         condition: service_started
-    networks: [whereswaldo]
+    networks: [SpotTheDifference]
 
 volumes:
-  whereswaldo-data:
+  SpotTheDifference-data:
   redis-data:
 
 networks:
-  whereswaldo:
+  SpotTheDifference:
     driver: bridge
