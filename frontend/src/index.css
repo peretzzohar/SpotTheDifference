@@ -164,4 +164,26 @@ main { max-width: 75rem; margin: auto; padding: 5rem 2rem 7rem; } h1, h2, h3 { f
 
 @layer utilities {
 	.theme-toggle:focus-visible, nav button:focus-visible, .primary-button:focus-visible, .secondary-button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+	img { display: block; max-width: 100%; }
+	.site-header, main, .upload-card, .result-images, .sample-result, .change-description { min-width: 0; }
+	.hero p, .muted, .change-description p, .difference-list strong, .dataset-tag, .file-name { overflow-wrap: anywhere; }
+
+	@media (max-width: 900px) {
+		.site-header { gap: 1rem; }
+		nav { min-width: 0; }
+		.result-images, .sample-images { min-width: 0; }
+	}
+
+	@media (max-width: 560px) {
+		.brand { max-width: 100%; }
+		nav { row-gap: .35rem; }
+		.section-heading, .results-actions { width: 100%; }
+		.result-images, .sample-images { width: 100%; }
+		.change-description p { font-size: 1rem; }
+	}
+
+	@media (max-width: 360px) {
+		.compare-button { gap: .75rem; padding-left: .8rem; padding-right: .8rem; }
+		.upload-placeholder { text-align: center; }
+	}
 }
