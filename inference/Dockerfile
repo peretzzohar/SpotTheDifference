@@ -7,5 +7,5 @@ COPY inference ./inference
 COPY ml ./ml
 COPY models ./models
 ENV PYTHONPATH=/app PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
-EXPOSE 8009
-CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8009"]
+EXPOSE 8010
+CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8010"]

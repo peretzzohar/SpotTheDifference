@@ -72,7 +72,14 @@ body { background: radial-gradient(circle at 85% 0%, color-mix(in oklch, var(--c
 .brand { color: var(--color-text); text-decoration: none; display: flex; gap: .7rem; align-items: center; font: 700 1.1rem 'Space Grotesk', sans-serif; }
 .brand-mark { width: 2rem; height: 2rem; display: grid; place-items: center; color: var(--color-on-accent); background: var(--color-accent); border-radius: 50%; }
 nav { display: flex; gap: .3rem; align-items: center; } nav button { border: 0; color: var(--color-muted); background: transparent; padding: .55rem .8rem; border-bottom: 2px solid transparent; } nav button.active { color: var(--color-text); border-color: var(--color-accent); }
-.theme-toggle { border: 1px solid var(--color-border); color: var(--color-text); background: var(--color-surface-tint); padding: .55rem .7rem; }
+.theme-toggle { box-sizing: border-box; width: 54px; height: 30px; flex-shrink: 0; padding: 2px; border: 2px solid var(--color-border); border-radius: 999px; background: var(--color-surface); cursor: pointer; transition: background .25s ease, border-color .25s ease; }
+.theme-toggle.dark { background: var(--color-text); border-color: var(--color-border); }
+.toggle-track { display: flex; align-items: center; width: 100%; }
+.toggle-thumb { display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--color-surface); transition: transform .25s ease, background .25s ease; }
+.theme-toggle.dark .toggle-thumb { transform: translateX(24px); background: var(--color-surface-tint); }
+.sun-icon, .moon-icon { width: 13px; height: 13px; }
+.sun-icon { fill: none; stroke: var(--color-accent); stroke-width: 2; }
+.moon-icon { fill: var(--color-accent); }
 main { max-width: 75rem; margin: auto; padding: 5rem 2rem 7rem; } h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; margin: 0; } h1 { font-size: clamp(3rem, 8vw, 6.5rem); line-height: .93; letter-spacing: -.06em; max-width: 47rem; } h2 { font-size: 2rem; } p { line-height: 1.6; }
 .hero { margin-bottom: 4rem; } .hero p { max-width: 34rem; font-size: 1.1rem; color: var(--color-muted); margin: 1.8rem 0 0; } .hero.compact { margin-bottom: 3rem; }
 .eyebrow { display: block; color: var(--color-accent); font: 700 .72rem 'Space Grotesk', sans-serif; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 1rem; }
@@ -146,7 +153,7 @@ main { max-width: 75rem; margin: auto; padding: 5rem 2rem 7rem; } h1, h2, h3 { f
 	.brand-mark { width: 1.75rem; height: 1.75rem; }
 	nav { gap: .1rem .55rem; }
 	nav button { font-size: .8rem; }
-	.theme-toggle { padding: .45rem .55rem; }
+	.theme-toggle { padding: 2px; }
 	h1 { font-size: 2.35rem; }
 	.upload-preview { height: 11rem; }
 	.compared-overlay { padding: 1rem; }
